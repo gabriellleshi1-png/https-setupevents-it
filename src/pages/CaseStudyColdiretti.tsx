@@ -12,8 +12,8 @@ const ease = [0.22, 1, 0.36, 1] as const;
 const coverImage = new URL("@/assets/coldiretti-card.webp", import.meta.url).href;
 const nextCoverImage = new URL("@/assets/diesel-card.jpg", import.meta.url).href;
 const gallery = [
-  new URL("@/assets/coldiretti-1.jpg", import.meta.url).href,
-  new URL("@/assets/coldiretti-2.jpg", import.meta.url).href,
+  new URL("@/assets/coldiretti-1.webp", import.meta.url).href,
+  new URL("@/assets/coldiretti-2.webp", import.meta.url).href,
   new URL("@/assets/coldiretti-3.webp", import.meta.url).href,
   new URL("@/assets/coldiretti-4.webp", import.meta.url).href,
 ];

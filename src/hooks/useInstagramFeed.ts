@@ -12,7 +12,8 @@ export interface InstagramPost {
 // URL del feed JSON di Behold (https://behold.so), es. "https://feeds.behold.so/XXXXXXXX".
 // È un URL pubblico per costruzione (non contiene token), quindi può stare nel codice.
 // In alternativa si può impostare la variabile d'ambiente VITE_INSTAGRAM_FEED_URL.
-const INSTAGRAM_FEED_URL: string = import.meta.env.VITE_INSTAGRAM_FEED_URL ?? "";
+const INSTAGRAM_FEED_URL: string =
+  import.meta.env.VITE_INSTAGRAM_FEED_URL ?? "https://feeds.behold.so/NeepXWCbq3lBpR3PyVfl";
 
 interface BeholdPost {
   id: string;

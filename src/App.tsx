@@ -24,6 +24,7 @@ const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
 const CaseStudyDiesel = lazy(() => import("./pages/CaseStudyDiesel"));
 const CaseStudyMediolanum = lazy(() => import("./pages/CaseStudyMediolanum"));
 const CaseStudyDistretto12 = lazy(() => import("./pages/CaseStudyDistretto12"));
+const CaseStudyColdiretti = lazy(() => import("./pages/CaseStudyColdiretti"));
 
 const queryClient = new QueryClient();
 
@@ -65,6 +66,7 @@ const App = () => (
             <Route path="/case-study/diesel" element={<CaseStudyDiesel />} />
             <Route path="/case-study/mediolanum" element={<CaseStudyMediolanum />} />
             <Route path="/case-study/distretto-12" element={<CaseStudyDistretto12 />} />
+            <Route path="/case-study/coldiretti" element={<CaseStudyColdiretti />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

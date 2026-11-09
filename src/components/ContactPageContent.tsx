@@ -147,7 +147,7 @@ const ContactPageContent = ({
             <div className="mt-9 pt-7 border-t border-white/[0.06]">
               <p className="text-xs uppercase tracking-[0.3em] text-white/55 mb-4">Seguici</p>
               <div className="flex gap-3">
-                <SocialBtn href="https://www.instagram.com/gabrielleshi_events/" label="Instagram"><Instagram className="w-4 h-4" /></SocialBtn>
+                <SocialBtn href="https://www.instagram.com/setup_eventss/" label="Instagram"><Instagram className="w-4 h-4" /></SocialBtn>
                 <SocialBtn href="https://linkedin.com" label="LinkedIn"><Linkedin className="w-4 h-4" /></SocialBtn>
               </div>
             </div>

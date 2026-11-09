@@ -10,7 +10,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 const ease = [0.22, 1, 0.36, 1] as const;
 
 const coverImage = new URL("@/assets/distretto12-card.webp", import.meta.url).href;
-const nextCoverImage = new URL("@/assets/diesel-card.jpg", import.meta.url).href;
+const nextCoverImage = new URL("@/assets/coldiretti-card.webp", import.meta.url).href;
 const gallery = [
   new URL("@/assets/distretto12-1.jpg", import.meta.url).href,
   new URL("@/assets/distretto12-2.jpg", import.meta.url).href,
@@ -21,7 +21,7 @@ const gallery = [
 const tags = ["Format Esclusivo", "Direzione Artistica", "PR Strategiche", "Regia Luci & Audio"];
 
 const stats = [
-  { label: "Anno", value: "2025" },
+  { label: "Anno", value: "2026" },
   { label: "Occasione", value: "Pitti Uomo" },
   { label: "Location", value: "Distretto 12, Firenze" },
   { label: "Servizi", value: "Art Direction · PR · AV" },
@@ -29,9 +29,9 @@ const stats = [
 
 const CaseStudyDistretto12 = () => {
   useEffect(() => {
-    document.title = "Case Study Distretto 12 — Pitti Uomo 2025 | SetupEvents";
+    document.title = "Case Study Distretto 12 — Pitti Uomo 2026 | SetupEvents";
     const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", "Format esclusivo per Distretto 12 a Firenze in occasione di Pitti Uomo: direzione artistica, PR strategiche, selezione ospiti VIP, hostess dedicate e regia luci-audio. SetupEvents 2025.");
+    if (meta) meta.setAttribute("content", "Format esclusivo per Distretto 12 a Firenze in occasione di Pitti Uomo: direzione artistica, PR strategiche, selezione ospiti VIP, hostess dedicate e regia luci-audio. SetupEvents 2026.");
   }, []);
 
   return (
@@ -45,7 +45,7 @@ const CaseStudyDistretto12 = () => {
         <section className="relative flex-1 overflow-hidden">
           <motion.img
             src={coverImage}
-            alt="Distretto 12 Pitti Uomo Firenze 2025"
+            alt="Distretto 12 Pitti Uomo Firenze 2026"
             className="absolute inset-0 w-full h-full object-cover"
             initial={{ scale: 1.06 }}
             animate={{ scale: 1 }}
@@ -79,7 +79,7 @@ const CaseStudyDistretto12 = () => {
                 className="flex flex-col justify-center"
               >
                 <span className="text-xs uppercase tracking-[0.3em] text-primary font-medium mb-4 block">
-                  Case Study · 2025
+                  Case Study · 2026
                 </span>
                 <h1 className="text-5xl md:text-6xl lg:text-8xl font-display font-extrabold tracking-tighter text-white leading-[1] mb-6">
                   Distretto 12
@@ -182,7 +182,7 @@ const CaseStudyDistretto12 = () => {
             >
               <img
                 src={src}
-                alt={`Distretto 12 Pitti Uomo 2025 — foto ${i + 1}`}
+                alt={`Distretto 12 Pitti Uomo 2026 — foto ${i + 1}`}
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                 loading="lazy"
                 decoding="async"
@@ -192,12 +192,12 @@ const CaseStudyDistretto12 = () => {
         </div>
       </section>
 
-      {/* Banner — torna al primo case study (Diesel) */}
-      <Link to="/case-study/diesel" className="block group">
+      {/* Next case study — banner con immagine copertina */}
+      <Link to="/case-study/coldiretti" className="block group">
         <section className="relative h-64 md:h-80 overflow-hidden">
           <img
             src={nextCoverImage}
-            alt="Diesel — torna al primo case study"
+            alt="Coldiretti — prossimo case study"
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             loading="lazy"
             decoding="async"
@@ -210,9 +210,9 @@ const CaseStudyDistretto12 = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease }}
           >
-            <p className="text-xs uppercase tracking-[0.4em] text-white/50 mb-3">Torna all'inizio</p>
+            <p className="text-xs uppercase tracking-[0.4em] text-white/50 mb-3">Prossimo case study</p>
             <p className="text-3xl md:text-5xl font-display font-extrabold text-white tracking-tighter group-hover:text-primary transition-colors duration-300">
-              Diesel
+              Coldiretti
             </p>
             <div className="mt-5 flex items-center gap-2 text-white/50 group-hover:text-primary transition-colors duration-300">
               <span className="text-xs uppercase tracking-[0.3em]">Scopri</span>

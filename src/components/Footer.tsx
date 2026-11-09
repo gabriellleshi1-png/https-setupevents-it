@@ -128,7 +128,7 @@ const Footer = () => {
             <h4 className="font-display font-bold text-sm uppercase tracking-[0.15em] mb-7 text-white/70">{t("footer.social")}</h4>
             <div className="flex gap-3">
               {[
-                { icon: Instagram, label: "Instagram", href: "https://www.instagram.com/gabrielleshi_events/" },
+                { icon: Instagram, label: "Instagram", href: "https://www.instagram.com/setup_eventss/" },
                 { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/feed/" },
               ].map((social) => (
                 <motion.a

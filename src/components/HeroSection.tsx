@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const logoSplash = "/images/logo-splash.png";
 
 // Immagine hero in public/ per abilitare il preload in index.html
-const heroBg = "/images/hero-poster.jpg";
+const heroBg = "/images/hero-poster-v2.jpg";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -18,8 +18,8 @@ const pickHeroVideo = (): string | null => {
   if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return null;
   if (conn?.saveData || /2g$/.test(conn?.effectiveType ?? "")) return null;
   return window.matchMedia?.("(min-width: 768px)").matches
-    ? "/videos/hero-bg-720.mp4"
-    : "/videos/hero-bg-480.mp4";
+    ? "/videos/hero-v2-720.mp4"
+    : "/videos/hero-v2-480.mp4";
 };
 
 const HeroSection = ({ onIntroComplete }: { onIntroComplete?: () => void }) => {

@@ -11,11 +11,10 @@ const heroBg = "/images/hero-poster-v2.jpg";
 const ease = [0.22, 1, 0.36, 1] as const;
 
 // Sceglie il video in base al dispositivo. Restituisce null (resta l'immagine) se
-// l'utente ha ridotto le animazioni, ha il risparmio dati o una connessione 2G.
+// l'utente ha il risparmio dati o una connessione 2G.
 const pickHeroVideo = (): string | null => {
   if (typeof window === "undefined") return null;
   const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
-  if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return null;
   if (conn?.saveData || /2g$/.test(conn?.effectiveType ?? "")) return null;
   return window.matchMedia?.("(min-width: 768px)").matches
     ? "/videos/hero-v2-720.mp4"
@@ -29,10 +28,6 @@ const HeroSection = ({ onIntroComplete }: { onIntroComplete?: () => void }) => {
   const startedRef = useRef(false);
   const inViewRef = useRef(true);
   const lastErrorRef = useRef("");
-
-  // Pannello diagnostico: si attiva aprendo il sito con ?hero-debug (es. setupevents.it/?hero-debug)
-  const debug = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("hero-debug");
-  const [debugInfo, setDebugInfo] = useState("");
 
   const [videoSrc] = useState<string | null>(pickHeroVideo);
   const [showContent, setShowContent] = useState(false);
@@ -140,28 +135,6 @@ const HeroSection = ({ onIntroComplete }: { onIntroComplete?: () => void }) => {
     };
   }, [videoSrc]);
 
-  useEffect(() => {
-    if (!debug) return;
-    const iv = window.setInterval(() => {
-      const v = videoRef.current;
-      const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
-      setDebugInfo(
-        [
-          `src: ${videoSrc ?? "NESSUNO (video disattivato)"}`,
-          `reducedMotion: ${window.matchMedia?.("(prefers-reduced-motion: reduce)").matches}`,
-          `saveData: ${conn?.saveData ?? "n/d"}  rete: ${conn?.effectiveType ?? "n/d"}`,
-          v
-            ? `readyState: ${v.readyState}/4  network: ${v.networkState}  paused: ${v.paused}  t: ${v.currentTime.toFixed(2)}s  errore video: ${v.error?.code ?? "nessuno"}`
-            : "elemento video: assente",
-          `ultimo errore play(): ${lastErrorRef.current || "nessuno"}`,
-          `hero visibile: ${inViewRef.current}`,
-          `ua: ${navigator.userAgent}`,
-        ].join("\n")
-      );
-    }, 500);
-    return () => window.clearInterval(iv);
-  }, [debug, videoSrc]);
-
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
   const overlayOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 0.6]);
@@ -171,12 +144,6 @@ const HeroSection = ({ onIntroComplete }: { onIntroComplete?: () => void }) => {
     <section ref={ref} className="relative h-[100svh] flex flex-col overflow-hidden">
       {/* H1 della home: il testo visibile dell'hero è dentro il video, quindi serve per SEO e screen reader */}
       <h1 className="sr-only">{t("hero.seoHeading")}</h1>
-
-      {debug && (
-        <pre className="fixed bottom-2 left-2 right-2 z-[100] max-h-[40vh] overflow-auto whitespace-pre-wrap break-all rounded bg-black/85 p-3 text-[11px] leading-snug text-green-300">
-          {debugInfo || "…"}
-        </pre>
-      )}
 
       {/* Logo Intro Overlay */}
       <AnimatePresence>

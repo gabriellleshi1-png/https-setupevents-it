@@ -27,6 +27,12 @@ const HeroSection = ({ onIntroComplete }: { onIntroComplete?: () => void }) => {
   const ref = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const startedRef = useRef(false);
+  const inViewRef = useRef(true);
+  const lastErrorRef = useRef("");
+
+  // Pannello diagnostico: si attiva aprendo il sito con ?hero-debug (es. setupevents.it/?hero-debug)
+  const debug = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("hero-debug");
+  const [debugInfo, setDebugInfo] = useState("");
 
   const [videoSrc] = useState<string | null>(pickHeroVideo);
   const [showContent, setShowContent] = useState(false);
@@ -43,9 +49,12 @@ const HeroSection = ({ onIntroComplete }: { onIntroComplete?: () => void }) => {
     video.setAttribute("webkit-playsinline", "");
     const p = video.play();
     if (p) {
-      p.catch(() => {
+      p.catch((e) => {
+        lastErrorRef.current = `${e?.name}: ${e?.message}`;
         setTimeout(() => {
-          video.play().catch(() => {});
+          video.play().catch((e2) => {
+            lastErrorRef.current = `${e2?.name}: ${e2?.message}`;
+          });
         }, 300);
       });
     }
@@ -93,6 +102,7 @@ const HeroSection = ({ onIntroComplete }: { onIntroComplete?: () => void }) => {
     if (!section || !video || typeof IntersectionObserver === "undefined") return;
     const io = new IntersectionObserver(
       ([entry]) => {
+        inViewRef.current = entry.isIntersecting;
         if (!entry.isIntersecting) video.pause();
         else if (startedRef.current) video.play().catch(() => {});
       },
@@ -101,6 +111,56 @@ const HeroSection = ({ onIntroComplete }: { onIntroComplete?: () => void }) => {
     io.observe(section);
     return () => io.disconnect();
   }, [videoSrc]);
+
+  // Se il browser blocca o interrompe la riproduzione (autoplay negato, risparmio energetico,
+  // scheda in background...), riprova: a ogni interazione, al ritorno sulla scheda e ogni 1,5 s.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const kick = () => {
+      if (!startedRef.current || !inViewRef.current || !video.paused) return;
+      video.play().catch((e) => {
+        lastErrorRef.current = `${e?.name}: ${e?.message}`;
+      });
+    };
+    const events = ["pointerdown", "touchstart", "keydown", "wheel", "scroll", "mousemove"] as const;
+    events.forEach((ev) => window.addEventListener(ev, kick, { passive: true }));
+    video.addEventListener("canplay", kick);
+    video.addEventListener("loadeddata", kick);
+    document.addEventListener("visibilitychange", kick);
+    window.addEventListener("focus", kick);
+    const iv = window.setInterval(kick, 1500);
+    return () => {
+      events.forEach((ev) => window.removeEventListener(ev, kick));
+      video.removeEventListener("canplay", kick);
+      video.removeEventListener("loadeddata", kick);
+      document.removeEventListener("visibilitychange", kick);
+      window.removeEventListener("focus", kick);
+      window.clearInterval(iv);
+    };
+  }, [videoSrc]);
+
+  useEffect(() => {
+    if (!debug) return;
+    const iv = window.setInterval(() => {
+      const v = videoRef.current;
+      const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+      setDebugInfo(
+        [
+          `src: ${videoSrc ?? "NESSUNO (video disattivato)"}`,
+          `reducedMotion: ${window.matchMedia?.("(prefers-reduced-motion: reduce)").matches}`,
+          `saveData: ${conn?.saveData ?? "n/d"}  rete: ${conn?.effectiveType ?? "n/d"}`,
+          v
+            ? `readyState: ${v.readyState}/4  network: ${v.networkState}  paused: ${v.paused}  t: ${v.currentTime.toFixed(2)}s  errore video: ${v.error?.code ?? "nessuno"}`
+            : "elemento video: assente",
+          `ultimo errore play(): ${lastErrorRef.current || "nessuno"}`,
+          `hero visibile: ${inViewRef.current}`,
+          `ua: ${navigator.userAgent}`,
+        ].join("\n")
+      );
+    }, 500);
+    return () => window.clearInterval(iv);
+  }, [debug, videoSrc]);
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
@@ -111,6 +171,12 @@ const HeroSection = ({ onIntroComplete }: { onIntroComplete?: () => void }) => {
     <section ref={ref} className="relative h-[100svh] flex flex-col overflow-hidden">
       {/* H1 della home: il testo visibile dell'hero è dentro il video, quindi serve per SEO e screen reader */}
       <h1 className="sr-only">{t("hero.seoHeading")}</h1>
+
+      {debug && (
+        <pre className="fixed bottom-2 left-2 right-2 z-[100] max-h-[40vh] overflow-auto whitespace-pre-wrap break-all rounded bg-black/85 p-3 text-[11px] leading-snug text-green-300">
+          {debugInfo || "…"}
+        </pre>
+      )}
 
       {/* Logo Intro Overlay */}
       <AnimatePresence>
